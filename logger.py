@@ -2,7 +2,7 @@ import sys
 import logging.config
 # We don't want to lose logs that occur before the dal being initialized
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
-logging.getLogger().setLevel(logging.INFO)
+logging.getLogger().setLevel(logging.DEBUG)
 
 LOGGING_CONFIG = {
     'version': 1,
