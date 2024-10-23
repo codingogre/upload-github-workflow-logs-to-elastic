@@ -45,7 +45,7 @@ def main():
     elastic_logger = logging.getLogger("elastic")
     metadata_url = f"https://api.github.com/repos/{github_org}/{github_repo}/actions/runs/{github_run_id}"
     try:
-        r = requests.get(metadata_url, stream=True, headers={
+        r = requests.get(metadata_url, stream=True, timeout=10, headers={
             "Authorization": f"token {github_token}"
         })
         metadata = json.loads(r.content)
@@ -64,7 +64,7 @@ def main():
     # extract all done jobs
     jobs = {}
     try:
-        jobs_response = requests.get(jobs_url, headers={
+        jobs_response = requests.get(jobs_url, timeout=10, headers={
             "Authorization": f"token {github_token}"
         })
         if not jobs_response.ok:
@@ -94,8 +94,9 @@ def main():
 
     for job_id in jobs:
         try:
+            print(f"In the jobs loop.  job_id={job_id}")
             job_logs_url = f"https://api.github.com/repos/{github_org}/{github_repo}/actions/jobs/{job_id}/logs"
-            r = requests.get(job_logs_url, stream=True, headers={
+            r = requests.get(job_logs_url, stream=True, timeout=10, headers={
                 "Authorization": f"token {github_token}"
             })
             if not r.ok:
